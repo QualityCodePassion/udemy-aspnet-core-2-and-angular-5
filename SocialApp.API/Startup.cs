@@ -28,6 +28,7 @@ namespace SocialApp.API
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddMvc();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +39,8 @@ namespace SocialApp.API
                 app.UseDeveloperExceptionPage();
             }
 
+            //TODO Only doing this for demo purpose, I wouldn't use this in productin code
+            app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
             app.UseMvc();
         }
     }
