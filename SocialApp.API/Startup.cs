@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +33,22 @@ namespace SocialApp.API
             services.AddDbContext<Data.DataContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            services.AddMvc();
+            //services.AddMvc();
+            // based on "Step 2: Authorize all the things" 
+            // from: https://github.com/blowdart/AspNetAuthorizationWorkshop
+            // Want to apply the "Authorize" attribute to all controllers by default
+            // and only allow public access to controllers that have the
+            // "AllowAnonymous" attribute.
+            // If in future you need different authorization in different parts, see
+            // https://joonasw.net/view/apply-authz-by-default
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
 
