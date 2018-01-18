@@ -68,8 +68,6 @@ namespace SocialApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] RegisterUserDto user)
         {
-            // TODO Add exception handling and log it
-
             var loggedInUser = await _authRepo.Login(user.Username.ToLower(),
                  user.Password);
 

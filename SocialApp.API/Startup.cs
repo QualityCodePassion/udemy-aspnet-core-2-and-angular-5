@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialApp.API.Data;
+using SocialApp.API.Helpers;
 
 namespace SocialApp.API
 {
@@ -72,6 +76,28 @@ namespace SocialApp.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // Can set this environment temporarily from command line as follows
+                // $env:ASPNETCORE_ENVIRONMENT = "Production"
+
+                // Configure the global exception handler here so that you don't need 
+                // to catch all the exceptions in all the controllers etc
+                // Read http://www.talkingdotnet.com/global-exception-handling-in-aspnet-core-webapi/
+                app.UseExceptionHandler( builder => 
+                {
+                    builder.Run( async context => {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        
+                        if( error != null)
+                        {
+                            context.Response.AddApplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message);
+                        }
+                    });
+                });
             }
 
             //TODO Only doing this for demo purpose, I wouldn't use this in productin code
