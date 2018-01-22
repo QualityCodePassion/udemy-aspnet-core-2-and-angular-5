@@ -10,16 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using SocialApp.API.Data;
 using SocialApp.API.Dtos;
+using SocialApp.API.Logging;
 using SocialApp.API.Models;
 
 namespace SocialApp.API.Controllers
 {
-    // TODO More this into a new "Core" folder
-    public class LoggingEvents
-    {
-        public const int UserExists = 1000;
-
-    }
 
     [Route("api/[Controller]")]
     public class AuthController : Controller
@@ -42,16 +37,24 @@ namespace SocialApp.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserDto userDto)
         {
             userDto.Username = userDto.Username.ToLower();
+            bool userExists = false;
 
             if (await _authRepo.UserExists(userDto.Username))
             {
+                userExists = true;
                 ModelState.AddModelError("Username", "Username already exists");
                 _logger.LogInformation(LoggingEvents.UserExists, "Username already exist: {Username}",
                     userDto.Username);
             }
 
             if (!ModelState.IsValid)
+            {
+                if (!userExists)
+                    _logger.LogWarning(LoggingEvents.InvalidModelState,
+                        "Register controller detected invalid model state");
+                
                 return BadRequest(ModelState);
+            }
 
             var newUser = new User
             {
@@ -73,6 +76,10 @@ namespace SocialApp.API.Controllers
 
             // If the user isn't logged in successfully, return "Unauthorised",
             // but don't give any hints about why.
+            
+            // TODO Only allow a certain amount of unsuccessful login attempts
+            // for a given user in a given time period before locking out
+            // the user until for a set time.
             if (loggedInUser == null)
                 return Unauthorized();
 
