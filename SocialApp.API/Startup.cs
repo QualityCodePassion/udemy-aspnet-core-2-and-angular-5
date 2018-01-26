@@ -100,7 +100,9 @@ namespace SocialApp.API
                 });
             }
 
-            //TODO Only doing this for demo purpose, I wouldn't use this in productin code
+            // TODO Only doing this for demo purpose, I wouldn't use this in productin code
+            // We want to allow CORS (Cross origin requests) so that our Angular SPA can
+            // easily make requests to our API to get the values it needs
             app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
             app.UseAuthentication();
             app.UseMvc();
