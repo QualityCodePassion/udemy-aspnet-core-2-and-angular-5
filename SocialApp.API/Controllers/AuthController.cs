@@ -36,7 +36,9 @@ namespace SocialApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto userDto)
         {
-            userDto.Username = userDto.Username.ToLower();
+            if(!string.IsNullOrEmpty(userDto.Username) )
+                userDto.Username = userDto.Username.ToLower();
+    
             bool userExists = false;
 
             if (await _authRepo.UserExists(userDto.Username))
