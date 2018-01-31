@@ -53,7 +53,7 @@ namespace SocialApp.API.Controllers
             {
                 if (!userExists)
                     _logger.LogWarning(LoggingEvents.InvalidModelState,
-                        "Register controller detected invalid model state");
+                        "Register method detected invalid model state");
                 
                 return BadRequest(ModelState);
             }
@@ -73,7 +73,18 @@ namespace SocialApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] RegisterUserDto user)
         {
-            var loggedInUser = await _authRepo.Login(user.Username.ToLower(),
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning(LoggingEvents.InvalidModelState,
+                    "Login method detected invalid model state");
+
+                return BadRequest(ModelState);
+            }
+
+            if (!string.IsNullOrEmpty(user.Username))
+                user.Username = user.Username.ToLower();
+
+            var loggedInUser = await _authRepo.Login(user.Username,
                  user.Password);
 
             // If the user isn't logged in successfully, return "Unauthorised",

@@ -26,7 +26,7 @@ namespace SocialApp.API.Data
         // TODO Should implement "max retries" type algorithm to prevent a brute
         // force attack!
 
-        if (username == null)
+        if (user == null)
             return null;
 
         if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
