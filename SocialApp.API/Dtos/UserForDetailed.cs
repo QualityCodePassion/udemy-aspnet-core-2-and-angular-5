@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using SocialApp.API.Models;
 
-namespace SocialApp.API.Models
+namespace SocialApp.API.Dtos
 {
-    public class User
+    public class UserForDetailed
     {
         [Required]
         public int Id { get; set; }
@@ -13,16 +13,10 @@ namespace SocialApp.API.Models
         [Required]
         public string Username { get; set; }
 
-        [Required]
-        public byte[] PasswordHash { get; set; }
-
-        [Required]
-        public byte [] PasswordSalt { get; set; }
-
         public string Gender { get; set; }
 
         [Required]
-        public DateTime DateOfBirth { get; set; }
+        public int Age { get; set; }
 
         public string KnownAs { get; set; }
 
@@ -42,11 +36,8 @@ namespace SocialApp.API.Models
 
         public string Country { get; set; }
 
-        public ICollection<Photo> Photos { get; set; }
+        public string PhotoUrl { get; set; }
 
-        public User() {
-            Photos = new Collection<Photo>();
-        }        
-
+        public ICollection<PhotosForDetailedDto> Photos { get; set; }
     }
 }

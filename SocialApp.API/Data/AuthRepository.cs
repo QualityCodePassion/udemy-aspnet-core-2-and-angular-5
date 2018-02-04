@@ -61,7 +61,7 @@ namespace SocialApp.API.Data
         }
     }
 
-    private (byte[], byte[]) CreatePasswordHash(string password)
+    public static (byte[], byte[]) CreatePasswordHash(string password)
     {
         // (My note) that since "HMACSHA512" derives from the "IDisposable" class, 
         // we should dispose of it as quickly as possible by utilizing the

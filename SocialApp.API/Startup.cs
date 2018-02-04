@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,8 @@ namespace SocialApp.API
             services.AddDbContext<Data.DataContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
+            services.AddTransient<SeedData>();
+
             //services.AddMvc();
             // based on "Step 2: Authorize all the things" 
             // from: https://github.com/blowdart/AspNetAuthorizationWorkshop
@@ -51,10 +54,17 @@ namespace SocialApp.API
                             .RequireAuthenticatedUser()
                             .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+            }).AddJsonOptions(options => {
+                // TODO Fix the circular referrencing then remove this!
+                // In Models the User class is referencing Photos and vica versa
+                options.SerializerSettings.ReferenceLoopHandling = 
+                Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             services.AddCors();
+            services.AddAutoMapper();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ISocialAppRepository, SocialAppRepository>();
 
             // TODO Put this key into a config
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
@@ -71,7 +81,7 @@ namespace SocialApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedData seeder)
         {
             if (env.IsDevelopment())
             {
@@ -106,6 +116,9 @@ namespace SocialApp.API
             app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
             app.UseAuthentication();
             app.UseMvc();
+
+            // Only use this SeedUsers when you need to seed more data to database
+            //seeder.SeedUsers();
         }
     }
 }

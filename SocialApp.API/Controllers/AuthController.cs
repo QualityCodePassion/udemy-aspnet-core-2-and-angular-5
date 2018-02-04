@@ -15,7 +15,7 @@ using SocialApp.API.Models;
 
 namespace SocialApp.API.Controllers
 {
-
+    [Authorize]
     [Route("api/[Controller]")]
     public class AuthController : Controller
     {
