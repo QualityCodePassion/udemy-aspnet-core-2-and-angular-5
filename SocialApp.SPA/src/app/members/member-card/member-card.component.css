@@ -1,0 +1,60 @@
+.panel-body {
+    padding: 5px
+}
+
+.panel-body img {
+    width: 100%
+}
+
+h5 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3a3c41;
+    margin-top: 1px;
+}
+
+h1 small {
+    font-weight: bold;
+    font-size: 12px;
+    font-style: italic;
+}
+
+img {
+    transform: scale(1,1);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+}
+
+/* 
+// TODO This didn't look so good, so come back and tidy it up if I get time
+
+.panel:hover img {
+    transform: scale(1.2,1.2);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+    opacity: 0.7;
+} */
+
+.panel-image {
+    overflow: hidden;
+    position: relative;
+}
+
+/* 
+// TODO couldn't get this to work. Come back to this later if I get time
+https://www.udemy.com/build-an-app-with-aspnet-core-and-angular-from-scratch/learn/v4/t/lecture/8708484?start=120
+.member-icons {
+    position: absolute;
+    bottom: -30%;
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+    opacity: 0;
+} */
+
+/* .panel:hover .member-icons {
+    bottom: 0;
+    opacity: 0;    
+}  */
+

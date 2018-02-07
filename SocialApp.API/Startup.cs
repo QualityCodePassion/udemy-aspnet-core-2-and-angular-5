@@ -66,7 +66,9 @@ namespace SocialApp.API
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ISocialAppRepository, SocialAppRepository>();
 
-            // TODO Put this key into a config
+            // Add Jwt Bearer Authenticatin using a key stored in the "appsettings.json" config file.
+            // This same key will be used to generate each JWT token handed to clients after they
+            // log in.
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
