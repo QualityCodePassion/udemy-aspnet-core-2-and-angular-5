@@ -24,7 +24,7 @@ export class UserService {
 
     getUser(id: number): Observable<User> {
         return this.authHttp
-            .get(this.baseUrl + 'user/' + id)
+            .get(this.baseUrl + 'users/' + id)
             .map(response => <User>response.json())
             .catch(this.errorHandler);
     }

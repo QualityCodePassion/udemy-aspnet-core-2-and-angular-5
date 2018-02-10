@@ -5,6 +5,8 @@ import {Routes} from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { MessagesComponent } from './messages/messages.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
+import { MemberListResolver } from './_resolvers/member-list.resolver';
 
 export const appRoutes: Routes = [
 {path: 'home', component: HomeComponent},
@@ -14,8 +16,8 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     // Add all routes that need to authorization to the array of children here:
     children: [
-        {path: 'members', component: MemberListComponent},
-        {path: 'members/:id', component: MemberDetailComponent},
+        {path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
+        {path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
         {path: 'messages', component: MessagesComponent},
         {path: 'lists', component: ListsComponent}
     ]
