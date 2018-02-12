@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialApp.API.Data;
 using SocialApp.API.Dtos;
+using SocialApp.API.Helpers;
 
 namespace SocialApp.API.Controllers
 {
@@ -21,10 +22,12 @@ namespace SocialApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(UserParams userParams)
         {
-            var users = await _repo.GetUsers();
-            var returnUsers = _mapper.Map<IEnumerable<UserForListDto>>(users);
+            var users = await _repo.GetUsers(userParams);
+            var returnUsers = _mapper.Map<IEnumerable<UserForListDto>>(users.Items);
+
+            Response.AddPagination(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
 
             return Ok(returnUsers);
         }

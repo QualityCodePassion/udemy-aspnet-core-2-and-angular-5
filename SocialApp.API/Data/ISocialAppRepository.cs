@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SocialApp.API.Models;
+using SocialApp.API.Helpers;
 
 namespace SocialApp.API.Data
 {
@@ -12,7 +13,7 @@ namespace SocialApp.API.Data
 
          Task<bool> SaveAll();
 
-         Task<IEnumerable<User>> GetUsers();
+         Task<PagedList<User>> GetUsers(UserParams userParams);
 
          Task<User> GetUser(int id);
     }
