@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SocialApp.API.Models;
 using SocialApp.API.Helpers;
+using System.Linq;
 
 namespace SocialApp.API.Data
 {
@@ -32,7 +33,19 @@ namespace SocialApp.API.Data
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users = _context.Users.Include(p => p.Photos);
+            // Note need to convert it with AsQueryable to be able to use the "Where"
+            // clause for filtering
+            var users = _context.Users.Include(p => p.Photos).AsQueryable();
+            users = users.Where( u => (u.Gender == userParams.Gender && u.Id != userParams.UserId));
+
+            // TODO shouldn't use magic numbers like this! Make it a static readonly
+            // as mentioned here: https://stackoverflow.com/a/8446525
+            if (userParams.MinAge != 18 || userParams.MaxAge != 99)
+            {
+                users = users.Where( u => (
+                    u.DateOfBirth.CalculateAge() >= userParams.MinAge && 
+                    u.DateOfBirth.CalculateAge() <= userParams.MaxAge));
+            }
 
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }

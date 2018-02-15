@@ -1,6 +1,7 @@
+import { PaginationResult } from './../_models/pagination';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Http, RequestOptions, Headers } from '@angular/http';
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import {User} from '../_models/User';
 import 'rxjs/add/operator/map';
@@ -15,10 +16,25 @@ export class UserService {
 
     constructor(private authHttp: AuthHttp) { }
 
-    getUsers(): Observable<User[]> {
+    getUsers(page?: number, itemsPerPage?: number): Observable<PaginationResult<User[]>> {
+        const paginatedResult: PaginationResult<User[]> = new PaginationResult<User[]>();
+        let queryString = '?';
+
+        if (page && itemsPerPage) {
+            queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage;
+        }
+
         return this.authHttp
-            .get(this.baseUrl + 'users')
-            .map(response => <User[]>response.json())
+            .get(this.baseUrl + 'users' + queryString)
+            .map((response: Response) => {
+                paginatedResult.result = response.json();
+
+                if (response.headers.get('pagination')) {
+                    paginatedResult.pagination = JSON.parse(response.headers.get('pagination'));
+                }
+
+                return paginatedResult;
+            })
             .catch(this.errorHandler);
     }
 

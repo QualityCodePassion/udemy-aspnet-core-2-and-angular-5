@@ -10,6 +10,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -45,6 +46,7 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
+    PaginationModule.forRoot(),
     AuthModule
   ],
   providers: [
