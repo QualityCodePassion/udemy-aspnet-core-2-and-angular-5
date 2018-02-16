@@ -35,7 +35,8 @@ namespace SocialApp.API.Data
         {
             // Note need to convert it with AsQueryable to be able to use the "Where"
             // clause for filtering
-            var users = _context.Users.Include(p => p.Photos).AsQueryable();
+            var users = _context.Users.Include(p => p.Photos)
+                .OrderByDescending(u => u.LastActive).AsQueryable();
             users = users.Where( u => (u.Gender == userParams.Gender && u.Id != userParams.UserId));
 
             // TODO shouldn't use magic numbers like this! Make it a static readonly
@@ -45,6 +46,16 @@ namespace SocialApp.API.Data
                 users = users.Where( u => (
                     u.DateOfBirth.CalculateAge() >= userParams.MinAge && 
                     u.DateOfBirth.CalculateAge() <= userParams.MaxAge));
+            }
+
+            if (!string.IsNullOrWhiteSpace(userParams.OrderBy))
+            {
+                switch(userParams.OrderBy)
+                {
+                    case "created":
+                        users = users.OrderByDescending(u => u.CreatedAt);
+                        break;
+                }
             }
 
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);

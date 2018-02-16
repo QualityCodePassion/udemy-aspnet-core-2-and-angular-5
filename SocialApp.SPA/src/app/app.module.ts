@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -47,6 +48,7 @@ import { MemberListResolver } from './_resolvers/member-list.resolver';
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
     PaginationModule.forRoot(),
+    ButtonsModule.forRoot(),
     AuthModule
   ],
   providers: [

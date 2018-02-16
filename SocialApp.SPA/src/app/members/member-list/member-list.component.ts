@@ -19,6 +19,7 @@ export class MemberListComponent implements OnInit {
   pagination: Pagination;
   genderList = [{value: 'male', Display: 'Males'}, {value: 'female',  Display: 'Females'}];
   userParams: any = {};
+  orderBy = 'lastActive';
 
   constructor(private userServive: UserService,
     private alertify: AlertifyService,
@@ -28,6 +29,7 @@ export class MemberListComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.users = data['users'].result;
       this.pagination = data['users'].pagination;
+      this.orderBy = 'lastActive';
     });
 
     this.setDefaults();

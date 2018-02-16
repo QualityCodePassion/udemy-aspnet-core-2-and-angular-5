@@ -24,15 +24,20 @@ export class UserService {
             queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
         }
 
-        // Apply the filtering if provided
-        if (userParams && userParams.gender) {
-             queryString += 'gender=' + userParams.gender + '&';
-        }
-        if (userParams && userParams.minAge) {
-             queryString += 'minAge=' + userParams.minAge + '&';
-        }
-        if (userParams && userParams.maxAge) {
-             queryString += 'maxAge=' + userParams.maxAge + '&';
+        // Apply the filtering if provided in the userParams
+        if (userParams) {
+            if (userParams.gender) {
+                queryString += 'gender=' + userParams.gender + '&';
+            }
+            if (userParams.minAge) {
+                queryString += 'minAge=' + userParams.minAge + '&';
+            }
+            if (userParams.maxAge) {
+                queryString += 'maxAge=' + userParams.maxAge + '&';
+            }
+            if (userParams.orderBy) {
+                queryString += 'orderBy=' + userParams.orderBy + '&';
+            }
         }
 
         return this.authHttp
