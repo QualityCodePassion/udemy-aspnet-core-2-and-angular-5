@@ -16,12 +16,23 @@ export class UserService {
 
     constructor(private authHttp: AuthHttp) { }
 
-    getUsers(page?: number, itemsPerPage?: number): Observable<PaginationResult<User[]>> {
+    getUsers(page?: number, itemsPerPage?: number, userParams?: any): Observable<PaginationResult<User[]>> {
         const paginatedResult: PaginationResult<User[]> = new PaginationResult<User[]>();
         let queryString = '?';
 
         if (page && itemsPerPage) {
-            queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage;
+            queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+        }
+
+        // Apply the filtering if provided
+        if (userParams && userParams.gender) {
+             queryString += 'gender=' + userParams.gender + '&';
+        }
+        if (userParams && userParams.minAge) {
+             queryString += 'minAge=' + userParams.minAge + '&';
+        }
+        if (userParams && userParams.maxAge) {
+             queryString += 'maxAge=' + userParams.maxAge + '&';
         }
 
         return this.authHttp
