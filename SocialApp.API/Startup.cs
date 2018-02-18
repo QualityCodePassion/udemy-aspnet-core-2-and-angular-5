@@ -112,21 +112,27 @@ namespace SocialApp.API
                 });
             }
 
-            // TODO - WARNING! Only doing this for demo purpose, I wouldn't use this in productin code
-            // We want to allow CORS (Cross origin requests) so that our Angular SPA can
-            // easily make requests to our API to get the values it needs. However, in production
-            // you need to set the following:
-            //
-            // AllowAnyOrigin - show be removed and add only the inteneded origins
-            // AllowAnyHeader - change to a whitelist of headers needed
-            // AllowAnyMethod - Safer to whitelist ones needed
-            // Access-Control-Allow-Credentials - Need to think carefully about this
-            // 
+            //app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
+            app.UseAuthentication();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc();
+            // We create a "Fallback" controller to pass non-API requests to the
+            // Angular SPA (i.e. when use hits refresh). When using the "MapWhen()"
+            // function, you can see we make sure it doesn't start with /api, if it does,
+            // it'll 404 within .NET if it can't be found. Otherwise, it will map to
+            // the "Fallback" controller that will return the SPA as html
             // See here for more infomation: 
             // https://docs.microsoft.com/en-us/aspnet/core/security/cors
-            app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
-            app.UseAuthentication();
-            app.UseMvc();
+            app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
+            {
+                builder.UseMvc(routes =>
+                {
+                    routes.MapSpaFallbackRoute(
+                        name: "spa-fallback",
+                        defaults: new { controller = "Fallback", action = "Index" });
+                });
+            });
 
             // Only use this SeedUsers when you need to seed more data to database
             //seeder.SeedUsers();
