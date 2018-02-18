@@ -1,88 +1,63 @@
 import { PaginationResult } from './../_models/pagination';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import {User} from '../_models/User';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { AuthHttp } from 'angular2-jwt';
 
 
 @Injectable()
 export class UserService {
     baseUrl = environment.apiUrl;
 
-    constructor(private authHttp: AuthHttp) { }
+    constructor(private authHttp: HttpClient) { }
 
     getUsers(page?: number, itemsPerPage?: number, userParams?: any): Observable<PaginationResult<User[]>> {
         const paginatedResult: PaginationResult<User[]> = new PaginationResult<User[]>();
-        let queryString = '?';
+        let params = new HttpParams();
 
         if (page && itemsPerPage) {
-            queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+            params = params.append('pageNumber', page.toString());
+            params = params.append('pageSize', itemsPerPage.toString());
         }
 
         // Apply the filtering if provided in the userParams
         if (userParams) {
             if (userParams.gender) {
-                queryString += 'gender=' + userParams.gender + '&';
+                params = params.append('gender', userParams.gender);
             }
             if (userParams.minAge) {
-                queryString += 'minAge=' + userParams.minAge + '&';
+                params = params.append('minAge', userParams.minAge);
             }
             if (userParams.maxAge) {
-                queryString += 'maxAge=' + userParams.maxAge + '&';
+                params = params.append('maxAge', userParams.maxAge);
             }
             if (userParams.orderBy) {
-                queryString += 'orderBy=' + userParams.orderBy + '&';
+                params = params.append('orderBy', userParams.orderBy);
             }
         }
-
         return this.authHttp
-            .get(this.baseUrl + 'users' + queryString)
-            .map((response: Response) => {
-                paginatedResult.result = response.json();
+            .get<User[]>(this.baseUrl + 'users', {observe: 'response', params })
+            .map(response => {
+                paginatedResult.result = response.body;
 
                 if (response.headers.get('pagination')) {
                     paginatedResult.pagination = JSON.parse(response.headers.get('pagination'));
                 }
 
                 return paginatedResult;
-            })
-            .catch(this.errorHandler);
+            });
     }
 
     getUser(id: number): Observable<User> {
         return this.authHttp
-            .get(this.baseUrl + 'users/' + id)
-            .map(response => <User>response.json())
-            .catch(this.errorHandler);
+            .get<User>(this.baseUrl + 'users/' + id);
     }
 
-    private errorHandler(error: any) {
-        const appError = error.headers.get('Application-error');
-
-        if (appError) {
-            return Observable.throw(appError);
-        }
-
-        if (!error) {
-            return Observable.throw('Unknown server error');
-        }
-
-        const serverError = error.json();
-        let modelStateErrors = '';
-
-        if (serverError) {
-            for (const key in serverError) {
-                if (serverError[key]) {
-                    modelStateErrors += serverError[key] + '\n';
-                }
-            }
-        }
-
-        return Observable.throw(modelStateErrors || 'Server error');
-    }
+    // This has now been moved to the "ErrorInterceptor" class (_services/error.interceptor.ts)
+    // private errorHandler(error: any) {
+    // }
 }
