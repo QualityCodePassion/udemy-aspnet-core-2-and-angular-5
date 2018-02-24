@@ -29,6 +29,16 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 
+export function getAccessToken(): string {
+  return localStorage.getItem('token');
+}
+
+export const jwtConfig = {
+  tokenGetter: getAccessToken,
+  // TODO Need to review this when deploying to an external server
+  whitelistedDomains: ['localhost:5000']
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,12 +62,7 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
     ButtonsModule.forRoot(),
     HttpClientModule,
     JwtModule.forRoot({
-      config: {
-        tokenGetter: () => {
-          return localStorage.getItem('token');
-        },
-        whitelistedDomains: ['localhost:5000']
-      }
+      config: jwtConfig
     })
   ],
   providers: [

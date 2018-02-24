@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { AuthUser } from './../_models/authUser';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -9,15 +10,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AuthService {
-    // TODO Replace this with the proper URL
-    baseUrl = 'http://localhost:5000/api/auth/';
+    baseUrl = environment.apiUrl;
     userToken: any;
     decodedToken: any;
 
     constructor(private http: HttpClient, private jwtHelperService: JwtHelperService) { }
 
     login(model: any) {
-        return this.http.post<AuthUser>(this.baseUrl + 'login', model,
+        return this.http.post<AuthUser>(this.baseUrl + 'auth/login', model,
             { headers: new HttpHeaders().set('content-type', 'application/json')}).map(
             user => {
                 if (user && user.tokenString) {
@@ -31,7 +31,7 @@ export class AuthService {
 
     register(model: any) {
         return this.http.post(
-            this.baseUrl + 'register', model,
+            this.baseUrl + 'auth/register', model,
             { headers: new HttpHeaders().set('content-type', 'application/json')});
     }
 
