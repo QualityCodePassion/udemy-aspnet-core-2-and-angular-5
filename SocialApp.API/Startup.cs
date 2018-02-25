@@ -35,8 +35,20 @@ namespace SocialApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Data.DataContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            // Use SQL Database if in Azure (Production), otherwise, use local SQL Server
+            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContext<Data.DataContext>(options =>
+                        options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+                // Automatically perform database migration
+                services.BuildServiceProvider().GetService<Data.DataContext>().Database.Migrate();
+            }
+            else
+            {
+                services.AddDbContext<Data.DataContext>(options => 
+                    options.UseSqlServer(Configuration.GetConnectionString("LocalSqlServer")));
+            }
 
             services.AddTransient<SeedData>();
 
