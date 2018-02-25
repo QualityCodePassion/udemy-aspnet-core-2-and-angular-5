@@ -240,5 +240,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-# This is the target for the Angular builds
-wwwroot/
+# This is the target for the Angular builds, but it turns out that I need
+# to include wwwroot to deploy to Azure via the git push method
+#wwwroot/
