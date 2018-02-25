@@ -147,7 +147,7 @@ namespace SocialApp.API
             });
 
             // Only use this SeedUsers when you need to seed more data to database
-            //seeder.SeedUsers();
+            seeder.SeedUsers();
         }
     }
 }
