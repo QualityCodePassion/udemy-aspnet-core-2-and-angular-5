@@ -100,6 +100,8 @@ namespace SocialApp.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                // Only allow CORS when testing locally in development mode
+                app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
             }
             else
             {
@@ -124,7 +126,6 @@ namespace SocialApp.API
                 });
             }
 
-            //app.UseCors( x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials() );
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
