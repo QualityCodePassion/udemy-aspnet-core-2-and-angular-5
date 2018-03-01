@@ -9,6 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -56,6 +57,7 @@ export const jwtConfig = {
     HttpModule,
     FormsModule,
     BsDropdownModule.forRoot(),
+    CollapseModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
     PaginationModule.forRoot(),

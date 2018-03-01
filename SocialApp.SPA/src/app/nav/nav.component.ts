@@ -10,6 +10,8 @@ import { AuthService } from '../_services/auth.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  isCollapsed = true;
+
 
   constructor(private authService: AuthService,
     private  alertify: AlertifyService, private router: Router) { }
