@@ -11,12 +11,12 @@
     <form class="form-inline" #form="ngForm" (ngSubmit)="loadUsers()" novalidate>
       <div class="col-xs-12 col-sm-5 col-lg-3">
         <div class="form-group">
-          <label for="minAge">Age From:</label>
+          <label for="minAge" class="control-label">Age From:</label>
           <input type="number" class="form-control" style="width: 60px" id="minAge" name="minAge"
           [(ngModel)]="userParams.minAge">
         </div>
         <div class="form-group">
-          <label for="maxAge">Age To:</label>
+          <label for="maxAge" class="control-label">Age To:</label>
           <input type="number" class="form-control" style="width: 60px" id="maxAge" name="maxAge"
           [(ngModel)]="userParams.maxAge">
         </div>
@@ -24,7 +24,7 @@
 
       <div class="col-xs-12 col-sm-3 col-lg-2">
         <div class="form-group">
-          <label for="gender">Show: </label>
+          <label for="gender" class="control-label">Show: </label>
           <select class="form-control" style="width: 100px" id="gender" name="gender" 
           [(ngModel)]="userParams.gender">
             <option *ngFor="let gender of genderList" [value]="gender.value">
@@ -44,7 +44,7 @@
 
       <div class="col-xs-12 col-sm-12 col-lg-4">
         <div class="form-group">
-          <label style="margin-right: 10px">Order By:</label>
+          <label style="margin-right: 7px" class="control-label">Order By:</label>
           <div class="btn-group">
             <button type="button" name="orderBy" [(ngModel)]="userParams.orderBy" (click)="loadUsers()"
               class="btn btn-primary" btnRadio="lastActive">Last Active</button>

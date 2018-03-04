@@ -16,10 +16,10 @@
           <a [routerLink]="['/members']">Suggestions</a>
         </li>
         <li routerLinkActive="active">
-            <a [routerLink]="['/lists']">Lists</a>
+          <a [routerLink]="['/lists']">Lists</a>
         </li>
         <li routerLinkActive="active">
-            <a [routerLink]="['/messages']">Messages</a>
+          <a [routerLink]="['/messages']">Messages</a>
         </li>
       </ul>
       <!-- #loginForm="ngForm" is the directive to tell it that it's an angular form -->
@@ -41,7 +41,9 @@
           <a (click)="false" class="dropdown-toggle" dropdownToggle>Welcome {{getUserName() | titlecase}} 
           <span class="caret"></span></a>
           <ul class="dropdown-menu" *dropdownMenu>
-            <li><a href="#"><i class="fa fa-user"></i> Edit Profile</a></li>
+            <li routerLinkActive="active">
+              <a [routerLink]="['/member/edit']"><i class="fa fa-user"></i>Edit Profile</a>
+            </li>
             <li role="separator" class="divider"></li>
             <li><a (click)="logout()"><i class="fa fa-sign-out"></i>Logout</a></li>
           </ul>

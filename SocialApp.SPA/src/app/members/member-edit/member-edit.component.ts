@@ -3,11 +3,11 @@ import { User } from '../../_models/User';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-member-detail',
-  templateUrl: './member-detail.component.html',
-  styleUrls: ['./member-detail.component.css']
+  selector: 'app-member-edit',
+  templateUrl: './member-edit.component.html',
+  styleUrls: ['./member-edit.component.css']
 })
-export class MemberDetailComponent implements OnInit {
+export class MemberEditComponent implements OnInit {
   user: User;
 
   constructor(private route: ActivatedRoute) { }

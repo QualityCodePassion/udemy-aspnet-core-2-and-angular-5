@@ -49,4 +49,8 @@ export class AuthService {
         return this.decodedToken.unique_name;
     }
 
+    getUserId() {
+        return this.decodedToken.nameid;
+    }
+
 }
