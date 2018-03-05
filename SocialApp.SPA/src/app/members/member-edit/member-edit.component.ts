@@ -18,4 +18,10 @@ export class MemberEditComponent implements OnInit {
     });
   }
 
+
+  onSubmit() {
+    // This code is based on the example in Angular Forms, see https://angular.io/guide/forms
+    console.log(this.user);
+  }
+
 }
