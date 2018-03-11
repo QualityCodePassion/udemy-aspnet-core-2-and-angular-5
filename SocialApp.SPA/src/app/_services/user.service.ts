@@ -57,6 +57,12 @@ export class UserService {
             .get<User>(this.baseUrl + 'users/' + id);
     }
 
+
+    updateUser(id: number, user: User): Observable<User> {
+        return this.authHttp
+            .put<User>(this.baseUrl + 'users/' + id, user);
+    }
+
     // This has now been moved to the "ErrorInterceptor" class (_services/error.interceptor.ts)
     // private errorHandler(error: any) {
     // }

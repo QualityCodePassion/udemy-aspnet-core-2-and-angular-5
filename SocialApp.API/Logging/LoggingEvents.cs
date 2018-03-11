@@ -7,5 +7,7 @@ namespace SocialApp.API.Logging
     {
         public const int UserExists = 1000;
         public const int InvalidModelState = 1001;
+        public const int InvalidUserId = 1002;
+        public const int DBSaveFailed = 1003;
     }
 }

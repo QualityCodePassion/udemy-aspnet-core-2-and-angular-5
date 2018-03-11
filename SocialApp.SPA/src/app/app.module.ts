@@ -1,5 +1,5 @@
 import { AuthGuard } from './_guards/auth.guard';
-
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { AlertifyService } from './_services/alertify.service';
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
@@ -78,7 +78,8 @@ export const jwtConfig = {
     MemberDetailResolver,
     MemberEditResolver,
     MemberListResolver,
-    ErrorInterceptorProvider
+    ErrorInterceptorProvider,
+    PreventUnsavedChanges
   ],
   bootstrap: [AppComponent]
 })

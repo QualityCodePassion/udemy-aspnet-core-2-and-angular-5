@@ -17,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                     return Observable.throw('Unknown server error');
                 }
 
-                const serverError = error.error();
+                const serverError = error.error;
                 let modelStateErrors = '';
 
                 if (serverError && typeof serverError === 'object') {

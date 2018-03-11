@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -77,5 +78,48 @@ namespace SocialApp.API.Controllers
 
             return Ok(returnUser);
         }
+
+        [HttpPut("{ID}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserForUpdateDto userForUpdateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning(LoggingEvents.InvalidModelState,
+                        "UpdateUser method detected invalid model state");
+                return BadRequest(ModelState);
+            }
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            
+            var userFromRepo = await _repo.GetUser(id);
+
+            if (userFromRepo == null)
+            {
+                return NotFound($"Could not find user with ID {id}");
+            }
+            
+            if (userFromRepo.Id != currentUserId)
+            {
+                _logger.LogWarning(LoggingEvents.InvalidUserId,
+                        $"Requested update for user ID  {id} doesn't match that of login in user ID" +
+                        currentUserId);
+                return Unauthorized();
+            }
+
+            _mapper.Map(userForUpdateDto, userFromRepo);
+            
+            if( !await _repo.SaveAll())
+            {
+                // If can't successfully save to DB this is a major error
+                var errMsg = $"Couldn't update DB for user ID  {id}";
+                _logger.LogError(LoggingEvents.DBSaveFailed, errMsg);
+                throw new Exception(errMsg);
+            }
+            
+            return NoContent();
+        }
+
+
+
     }
 }
