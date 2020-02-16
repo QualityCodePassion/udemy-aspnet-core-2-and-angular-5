@@ -98,6 +98,7 @@ namespace SocialApp.API.Controllers
 
             // Generate JSON Web Token (JWT)
             var tokenHandler = new JwtSecurityTokenHandler();
+            // Note, for a production code, you would store the key somewhere else.
             var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
             var tokenDesc = new SecurityTokenDescriptor
             {

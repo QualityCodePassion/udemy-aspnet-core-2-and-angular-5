@@ -46,6 +46,8 @@ namespace SocialApp.API
             }
             else
             {
+                // Use the SQL Server Express LocalDB for local debugging, which can be viewed
+                // via the SQL Server Object Explorer in Visaul Studio.
                 services.AddDbContext<Data.DataContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("LocalSqlServer")));
             }
@@ -147,6 +149,7 @@ namespace SocialApp.API
                 });
             });
 
+            // TODO Move this into the program calss
             // Only use this SeedUsers when you need to seed more data to database
             //seeder.SeedUsers();
         }

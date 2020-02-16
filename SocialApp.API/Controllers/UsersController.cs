@@ -118,8 +118,5 @@ namespace SocialApp.API.Controllers
             
             return NoContent();
         }
-
-
-
     }
 }
