@@ -14,13 +14,13 @@ namespace SocialApp.API.Helpers
                 .ForMember(dest => dest.PhotoUrl, options => 
                     options.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMainPhoto).Url))
                 .ForMember(dest => dest.Age, options => 
-                    options.ResolveUsing(d => d.DateOfBirth.CalculateAge()));
+                    options.MapFrom(d => d.DateOfBirth.CalculateAge()));
 
             CreateMap<User, UserForDetailed>()
                 .ForMember(dest => dest.PhotoUrl, options => 
                     options.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMainPhoto).Url))
                 .ForMember(dest => dest.Age, options => 
-                    options.ResolveUsing(d => d.DateOfBirth.CalculateAge()));
+                    options.MapFrom(d => d.DateOfBirth.CalculateAge()));
 
             CreateMap<Photo, PhotosForDetailedDto>();
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -68,7 +69,8 @@ namespace SocialApp.API
                             .RequireAuthenticatedUser()
                             .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).AddJsonOptions(options => {
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(options => {
                 // TODO Fix the circular referrencing then remove this!
                 // In Models the User class is referencing Photos and vica versa
                 options.SerializerSettings.ReferenceLoopHandling = 
@@ -76,7 +78,7 @@ namespace SocialApp.API
             });
 
             services.AddCors();
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ISocialAppRepository, SocialAppRepository>();
 
